@@ -1,67 +1,121 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import { questions, noTexts, yesTexts } from './db.ts';
+import { useEffect, useState } from "react";
+import "./App.css";
+import { questions, noTexts, yesTexts } from "./db.ts";
 
 const App = () => {
-  const [count, setCount] = useState(0);
+  const [noCount, setNoCount] = useState<number>(0);
   const [yesSize, setYesSize] = useState<number>(14);
   const [yesBtnVisible, setYesBtnVisible] = useState<boolean>(true);
-  const [noBtnVisibile, setNoBtnVisibile] = useState<boolean>(true);
+  const [noBtnVisibile, setNoBtnVisible] = useState<boolean>(true);
   const [yesText, setYesText] = useState<string>(yesTexts[0]);
   const [noText, setNoText] = useState<string>(noTexts[0]);
   const [mainText, setMainText] = useState<string>(questions[0]);
+  const [yesPressed, setYesPressed] = useState<boolean>(false);
+  const [gifUrl, setGifUrl] = useState<string>("");
+
+  const handleReset = () => {
+    setYesSize(14);
+    setYesBtnVisible(true)
+    setNoBtnVisible(true)
+    setYesText(yesTexts[0])
+    setNoText(noTexts[0])
+    setMainText(questions[0]);
+    setYesPressed(false);
+    setNoCount(0);
+  }
 
   const handleYesClick = () => {
     setYesBtnVisible(false);
-    setNoBtnVisibile(false);
-    setMainText("obaaa, te amos muitos!!");
-  }
+    setNoBtnVisible(false);
+    setYesPressed(true);
+
+    if (noCount == 0 || noCount == 1) {
+      setMainText("espero que a semana acabe para que eu possa te ver diiii noooovo peoreoreom beijo")
+      setGifUrl("https://media1.tenor.com/m/4vYPebk2hHUAAAAC/cute-dogs-puppies.gif");
+    }
+    else if (noCount > 1 && noCount < 5) {
+      setMainText("eita como vc é teimoso!! ainda bem que é lindo. vamos namorar bem essa sexta ;)")
+      setGifUrl("https://media1.tenor.com/m/x0eeZxeU56AAAAAC/puppy-cute.gif");
+    }
+    else if (noCount >= 5 && noCount < 8) {
+      setMainText("tava achando que vc nao me amava mais .... brincadeira nunca duvidei disso !! vamos ser muito felizes, mal posso esperar pra te ver");
+      setGifUrl("https://media1.tenor.com/m/u1mNNtND2k4AAAAd/cute-puppy.gif");
+    }
+    else if (noCount == questions.length) {
+      setMainText("as vezes tem que ser na ignorância.. te amo meu são valentino ;)")
+      setGifUrl("https://media1.tenor.com/m/R0tI3vJoklcAAAAd/cat-dog.gif")
+    }
+    else {
+      setMainText("oxente.. pane no sistema auguem me descomfigurou")
+      setGifUrl("https://media1.tenor.com/m/hxVOd2VnzosAAAAC/dogcozy-dogs.gif")
+    }
+  };
 
   const handleNoClick = () => {
-    setCount(count + 1);
-    setYesSize(yesSize + 4)
-    setNoText(noTexts[count])
-    setYesText(yesTexts[count])
-    setMainText(questions[count]);
-  }
+    setNoCount(noCount + 1);
+    setYesSize(yesSize * 1.1);
+    setNoText(noTexts[noCount]);
+    setYesText(yesTexts[noCount]);
+    setMainText(questions[noCount]);
+  };
 
   useEffect(() => {
-    if (count == questions.length - 1) {
+    if (noCount == questions.length - 1) {
       setYesBtnVisible(false);
-      setNoBtnVisibile(true);
-    }
-    else if (count == questions.length) {
+      setNoBtnVisible(true);
+    } else if (noCount == questions.length) {
       setYesBtnVisible(true);
-      setNoBtnVisibile(false);
-    }
-    else if (count > questions.length) { 
+      setNoBtnVisible(false);
+    } else if (noCount > questions.length) {
       setYesBtnVisible(false);
-      setNoBtnVisibile(false);
+      setNoBtnVisible(false);
     }
   }, [mainText]);
 
   return (
     <>
-      <h1>CONVITE</h1>
       <h3> {mainText} </h3>
-      <div style={{
-        padding: '2em',
-        display: 'flex',
-        justifyContent: 'space-evenly'
-      }}>
-        <button style={{
-          display: yesBtnVisible || (yesText !== "") ? "block" : "none",
-          fontSize: yesSize + 'px'
-        }} onClick={handleYesClick}> {yesText} </button>
-        <button style={{
-          display: noBtnVisibile ? "block" : "none"
-        }} onClick={handleNoClick}
+      {yesPressed ? (<div>
+        <img src={gifUrl} width="250px" />
+        <br />
+        <span style={{ color: 'grey' }}> caso não tenha percebido nós somos os auaus </span>
+        <br />
+        <button style={{ padding: '2em' }}
+          onClick={handleReset}
+        > Retornar </button>
+      </div>) :
+        <div
+          style={{
+            padding: "2em",
+            display: "flex",
+            justifyContent: "space-evenly",
+            alignItems: 'center'
+          }}
         >
-          {noText}
-        </button>
-      </div>
+          <button
+            style={{
+              display: yesBtnVisible && yesText !== "" ? "block" : "none",
+              fontSize: yesSize + "px",
+              marginRight: '1rem'
+            }}
+            onClick={handleYesClick}
+          >
+            {" "}
+            {yesText}{" "}
+          </button>
+          <button
+            style={{
+              display: noBtnVisibile ? "block" : "none",
+              marginLeft: '1rem'
+            }}
+            onClick={handleNoClick}
+          >
+            {noText}
+          </button>
+        </div>
+      }
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
