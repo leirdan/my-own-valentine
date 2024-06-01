@@ -6,7 +6,7 @@ const App = () => {
   const [noCount, setNoCount] = useState<number>(0);
   const [yesSize, setYesSize] = useState<number>(14);
   const [yesBtnVisible, setYesBtnVisible] = useState<boolean>(true);
-  const [noBtnVisibile, setNoBtnVisible] = useState<boolean>(true);
+  const [noBtnVisible, setNoBtnVisible] = useState<boolean>(true);
   const [yesText, setYesText] = useState<string>(yesTexts[0]);
   const [noText, setNoText] = useState<string>(noTexts[0]);
   const [mainText, setMainText] = useState<string>(questions[0]);
@@ -105,7 +105,7 @@ const App = () => {
           </button>
           <button
             style={{
-              display: noBtnVisibile ? "block" : "none",
+              display: noBtnVisible ? "block" : "none",
               marginLeft: '1rem'
             }}
             onClick={handleNoClick}
