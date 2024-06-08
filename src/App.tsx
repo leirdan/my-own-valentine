@@ -3,6 +3,7 @@ import "./App.css";
 import { questions, noTexts, yesTexts } from "./db.ts";
 
 const App = () => {
+  const [started, setStarted] = useState<boolean>(false);
   const [noCount, setNoCount] = useState<number>(0);
   const [yesSize, setYesSize] = useState<number>(16);
   const [yesBtnVisible, setYesBtnVisible] = useState<boolean>(true);
@@ -14,7 +15,8 @@ const App = () => {
   const [gifUrl, setGifUrl] = useState<string>("");
 
   const handleReset = () => {
-    setYesSize(14);
+    setStarted(false);
+    setYesSize(16);
     setYesBtnVisible(true);
     setNoBtnVisible(true);
     setYesText(yesTexts[0]);
@@ -82,54 +84,65 @@ const App = () => {
 
   return (
     <>
-      <h2> para baliel </h2>
-      <h3> {mainText} </h3>
-      {yesPressed ? (
-        <div>
-          <img src={gifUrl} width="250px" />
-          <br />
-          <span style={{ color: "grey" }}>
-            {" "}
-            caso não tenha percebido nós somos os auaus{" "}
-          </span>
-          <br />
-          <button style={{ padding: "2em", background: "green" }} onClick={handleReset}>
-            {" "}
-            Retornar{" "}
-          </button>
-        </div>
+      {started ? (
+        <>
+          <h3> {mainText} </h3>
+          {yesPressed ? (
+            <div>
+              <img src={gifUrl} width="250px" />
+              <br />
+              <span style={{ color: "grey" }}>
+                {" "}
+                caso não tenha percebido nós somos os auaus{" "}
+              </span>
+              <br />
+              <button
+                style={{ background: "green" }}
+                onClick={handleReset}
+              >
+                {" "}
+                Retornar{" "}
+              </button>
+            </div>
+          ) : (
+            <div
+              style={{
+                padding: "2em",
+                display: "flex",
+                justifyContent: "space-evenly",
+                alignItems: "center",
+              }}
+            >
+              <button
+                style={{
+                  display: yesBtnVisible && yesText !== "" ? "block" : "none",
+                  fontSize: yesSize + "px",
+                  marginRight: "1rem",
+                  background: "green",
+                }}
+                onClick={handleYesClick}
+              >
+                {" "}
+                {yesText}{" "}
+              </button>
+              <button
+                style={{
+                  display: noBtnVisible ? "block" : "none",
+                  marginLeft: "1rem",
+                  background: "red",
+                }}
+                onClick={handleNoClick}
+              >
+                {noText}
+              </button>
+            </div>
+          )}
+        </>
       ) : (
-        <div
-          style={{
-            padding: "2em",
-            display: "flex",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-          }}
-        >
-          <button
-            style={{
-              display: yesBtnVisible && yesText !== "" ? "block" : "none",
-              fontSize: yesSize + "px",
-              marginRight: "1rem",
-              background: 'green'
-            }}
-            onClick={handleYesClick}
-          >
-            {" "}
-            {yesText}{" "}
-          </button>
-          <button
-            style={{
-              display: noBtnVisible ? "block" : "none",
-              marginLeft: "1rem",
-              background: 'red'
-            }}
-            onClick={handleNoClick}
-          >
-            {noText}
-          </button>
-        </div>
+        <>
+          <h2> para baliel </h2>
+          <button style={{color: 'black'}} onClick={() => setStarted(true)}> abrir </button>
+        </>
       )}
     </>
   );
